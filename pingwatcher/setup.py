@@ -3,7 +3,7 @@ from setuptools import setup
 setup(name='pingwatcher',
       version='0.1',
       description='simple latency grapher',
-      url='http://github.com/blah',
+      url='https://github.com/analogpixel/pingwatcher',
       author='Matt Poepping',
       author_email='matt.poepping@gmail.com',
       license='MIT',
