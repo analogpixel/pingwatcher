@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- http://colorhunt.co/c/106719 -->
+
+	<style>
+
+	body {
+		margin: 0px;
+		padding: 0px;
+		background-color: #cccccc;
+	}
+
+	.wrapper {
+		
+	}
+
+	.divider {
+		background-color: #BC5148;
+		width: 100%;
+		height: 10px;
+	}
+	.install {
+		background-color: #f9f9f9;
+		width: 100%;
+		height: 600px;
+	}
+	.header {
+		grid-area: h;
+		//background-image: linear-gradient(#1e415e 10%,#2b5b84 90%);
+		background: #333;
+		width: 100%;
+		height: 500px;
+		font-family: "Helvetica Neue";
+		font-size: 2em;
+		color: white;
+		font-weight: 200;
+		font-stretch: 100%;
+	}
+
+	.install-wrapper {
+		background-color: #f9f9f9;
+		display: grid;
+		grid-template-columns: 1fr 6fr 1fr 6fr 1fr;
+		grid-template-rows: 600px;
+	}
+
+	.linux {
+		margin: 20px;
+		grid-column: 2/3;
+	}
+
+	.mac {
+		margin: 20px;
+		grid-column: 4/5;
+	}
+
+	</style>
+
+</head>
+<body>
+	
+	<div class=wrapper>
+		<div class=header>header</div>
+		
+		<div class=install-wrapper>
+		<div class=linux>
+			<h1>Install for Linux</h1>
+			<img src="img/linuxInstall.png" width=100%>	
+		</div>
+
+		<div class=mac>
+			<h1>Install for MacOS</h1>
+			<img src="img/macInstall.png" width=100%>	
+		</div>
+		
+	</div>
+
+</body>
+</html>

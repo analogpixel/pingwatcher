@@ -1,0 +1,212 @@
+#!/usr/bin/env python
+
+# https://supportex.net/blog/2011/09/rrd-python/
+# https://calomel.org/rrdtool.html
+# https://linux.die.net/man/1/rrdgraph
+# pip install --upgrade --force-reinstall .
+# https://python-packaging.readthedocs.io/en/latest/minimal.html
+
+# pip install multiping
+from multiping import MultiPing
+
+from socketserver import ThreadingMixIn
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+
+
+import time
+import os
+import threading
+import argparse
+import sys
+
+step = 2
+count = 0
+
+
+html = """
+<!--
+<head>
+<meta http-equiv="refresh" content="5">
+</head>
+-->
+
+<img src=/img width=100%>
+<br><br>
+<button onclick="location.href='/'" type="button">Reload</button>
+
+"""
+
+class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
+    pass
+
+class matt(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == "/":
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            #self.send_header("Content-length", len(DUMMY_RESPONSE))
+            self.end_headers()
+            self.wfile.write(str.encode(html))
+        if self.path == "/img":
+            f = open("pingstats3.png",'rb')
+            self.send_response(200)
+            self.send_header("Content-type", "image/png")
+            self.end_headers()
+            self.wfile.write(f.read())
+            f.close()
+
+
+def getColor():
+	colors = [ "#332288", "#88CCEE", "#44AA99", "#117733", "#999933", "#DDCC77", "#CC6677", "#882255", "#AA4499"]
+	while True:
+		for c in colors:
+			yield c
+
+
+def writePNG(hostdata):
+	cmd = [ "pingstats3.png" , "--start", "-1h",  "--vertical-label=Num", "-w 800" , 
+	"-h 400", "--no-gridfit", "--zoom", "2","--color","CANVAS#FFFFFF", "--color", "BACK#FFFFFF"]
+    
+	for h in hostdata:
+		name = hostdata[h]['name']
+		cmd.append( "DEF:%s_num=pingdata3.rrd:%s:AVERAGE" % (name, name))
+
+	for h in hostdata:
+		name = hostdata[h]['name']
+		cmd.append( "LINE2:%s_num%s:%s" % (name, hostdata[h]['color'], name) )
+    
+	#print(cmd)
+	rrdtool.graph(*cmd)
+
+
+def createRRD(filename, hostdata):
+	cmd = [ filename,  "--step", str(step), "--start", '0']
+
+	for h in hostdata:
+		name = hostdata[h]['name']
+		cmd.append( "DS:%s:GAUGE:2:U:U" % (name) )
+
+	cmd = cmd + ["RRA:AVERAGE:0.5:1:600","RRA:AVERAGE:0.5:6:700","RRA:AVERAGE:0.5:24:775","RRA:AVERAGE:0.5:288:797",
+ 	"RRA:MAX:0.5:1:600","RRA:MAX:0.5:6:700","RRA:MAX:0.5:24:775","RRA:MAX:0.5:444:797"]
+
+	#print(cmd)
+	rrdtool.create(*cmd)
+
+
+def runServer():
+	server.serve_forever(1)
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--httpport', type=int, default=8090, help='port to run webserver on')
+parser.add_argument('--disablehttp',  default=False,  action='store_true', help='do not start a http server')
+parser.add_argument('--keepexisting', default=False, action='store_true', help='keep existing RRD file')
+parser.add_argument('--host', type=str, default=[], action='append', help="format is name:ip")
+parser.add_argument('--backend', type=str, default='rrd', help='what backend to send data to: rrd,statsd')
+parser.add_argument('--statsd', type=str, default="localhost:8080", help='hostname:port for statsd')
+parser.add_argument('--statsdPrefix', type=str, default='pingwatcher', help='where to place statsd stats')
+parser.add_argument('--disableStatus', default=False, action='store_true', help='turn off the # marks')
+parser.add_argument('--clean', action='store_true', help='clean up rrd and png files on exit')
+args = parser.parse_args()
+
+## Build the hostdata 
+hostdata = {}
+cc = getColor()
+if len(args.host) == 0:
+	print("You need to specify at least one --host entry")
+	sys.exit()
+
+for h in args.host:
+	try:
+		name,ip = h.split(":")
+		hostdata[ip] = {'name': name, 'color': cc.__next__() }
+	except:
+		print("error processing host entry", h , "format should be name:ip")
+		sys.exit()
+
+## Configure the different backends as needed
+if args.backend == 'rrd':
+	print("Using RRD for backend")
+	# brew install rrdtool first
+	from rrdtool import update as rrd_update
+	import rrdtool
+	## if we didn't specify to keep the old data, then remove the file and
+	## create a new one
+	if not args.keepexisting:
+		if os.path.exists("pingdata3.rrd"):
+			os.unlink("pingdata3.rrd")
+
+		createRRD("pingdata3.rrd", hostdata)
+
+elif args.backend == 'statsd':
+	print("Using statsD for backend")
+	import statsd
+	args.disablehttp = True
+	try:
+		statsHost, statsPort = args.statsd.split(':')
+	except:
+		print("Unable to parse statsd host:", args.statsd)
+		sys.exit()
+
+	statsInterface = statsd.StatsClient(statsHost, int(statsPort), prefix=args.statsdPrefix)
+
+
+
+try:
+
+	if not args.disablehttp:
+		print("starting server on http://localhost:" + str(args.httpport))
+		server = ThreadingSimpleServer(('', args.httpport), matt)
+		t = threading.Thread(target=runServer)
+		t.start()
+
+	while True:
+		mp = MultiPing( hostdata.keys() )
+		mp.send()
+
+		response, no_responses = mp.receive(step)
+
+		if args.backend == 'rrd':
+			data = "N"
+			for host in hostdata:
+				if host in response:
+					data = data + ":" + str(response[host])
+				else:
+					data = data + ":4000"
+					print("Dropped Packet\n", host)
+
+				ret = rrd_update('pingdata3.rrd', data)
+
+			count +=1
+			if count %10 == 0:
+				writePNG(hostdata)
+
+		elif args.backend == 'statsd':
+			for host in hostdata:
+				if host in response:
+					statsInterface.gauge( hostdata[host]['name'], response[host] )
+				else:
+					statsInterface.gauge( hostdata[host]['name'], 4000 )
+					
+		if not args.disableStatus:
+			print("#", end='', flush=True)
+
+		time.sleep(1)
+		
+
+except KeyboardInterrupt:
+	print("Shutting Down")
+
+	if args.backend == 'rrd':
+		if not args.disablehttp:
+			server.shutdown()
+			t.join()
+
+		writePNG(hostdata)
+
+	if args.clean:
+		for f in ["pingdata3.rrd", "pingstats3.png"]:
+			if os.path.exists(f):
+				os.unlink(f)
+
+         
+
