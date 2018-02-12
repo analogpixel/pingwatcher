@@ -65,7 +65,7 @@ def getColor():
 
 def writePNG(hostdata):
 	cmd = [ "pingstats3.png" , "--start", "-1h",  "--vertical-label=Num", "-w 800" , 
-	"-h 400", "--no-gridfit", "--zoom", "2","--color","CANVAS#FFFFFF", "--color", "BACK#FFFFFF"]
+	"-h 400", "--no-gridfit", "--zoom", "2","--color","CANVAS#f9f9f9", "--color", "BACK#f9f9f9"]
     
 	for h in hostdata:
 		name = hostdata[h]['name']

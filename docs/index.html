@@ -12,28 +12,68 @@
 		background-color: #cccccc;
 	}
 
-	.wrapper {
-		
-	}
 
 	.divider {
 		background-color: #BC5148;
 		width: 100%;
 		height: 10px;
 	}
+
 	.install {
 		background-color: #f9f9f9;
 		width: 100%;
 		height: 600px;
 	}
+
 	.header {
-		grid-area: h;
-		//background-image: linear-gradient(#1e415e 10%,#2b5b84 90%);
 		background: #333;
 		width: 100%;
 		height: 500px;
+		
+	}
+
+	.col12 {
+		height: 100%;
+		display: grid;
+		grid-template-columns: repeat(12,1fr);
+		grid-template-rows: 2fr 1fr 2fr;
+	}
+
+	.headerGrid {
+		grid-column: 5/6;
+		grid-row: 2;
+		justify-content: center;
+		align-content: center;
+	}
+
+	.headerImage {
+		grid-column: 3/11;
+		grid-row: 3;
+		justify-content: center;
+		align-content: center;
+		vertical-align: bottom;
+		position: relative;
+	}
+
+	.largeHeaderText {
 		font-family: "Helvetica Neue";
 		font-size: 2em;
+		color: white;
+		font-weight: 200;
+		font-stretch: 100%;
+	}
+
+	.largeHeaderTextDark {
+		font-family: "Helvetica Neue";
+		font-size: 2em;
+		color: #333;
+		font-weight: 300;
+		font-stretch: 100%;
+	}
+
+	.smallHeaderText {
+		font-family: "Helvetica Neue";
+		font-size: 1em;
 		color: white;
 		font-weight: 200;
 		font-stretch: 100%;
@@ -43,18 +83,59 @@
 		background-color: #f9f9f9;
 		display: grid;
 		grid-template-columns: 1fr 6fr 1fr 6fr 1fr;
-		grid-template-rows: 600px;
+		grid-template-rows: 90px 300px;
 	}
 
+	.installText {
+		grid-column: 2/5;
+		grid-row: 1;
+		padding-top: 40px;
+		font-size: 1.5em;
+		font-family: "Helvetica Neue";
+		font-weight: 200;
+	}
 	.linux {
 		margin: 20px;
 		grid-column: 2/3;
+		grid-row: 2;
 	}
 
 	.mac {
 		margin: 20px;
 		grid-column: 4/5;
+		grid-row:2;
 	}
+
+	#imageBottom {
+		position: absolute;
+		bottom:0;
+	}
+
+	.codeBox {
+		width: 90%;
+		border-top: 20px solid rgb(125,151,183)	;
+		background-color: #333;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		padding:10px;
+		color: #ccc;
+		font-size: 1.5em;
+
+	}
+
+	.features {
+		display: grid;
+		grid-template-columns: 1fr 2fr 1fr 2fr 1fr 2fr 1fr;
+		width: 100%;
+		background-color: rgb(125,151,183)	;
+		font-size: 1.3em;
+		color: #ddd;
+		padding: 20px;
+	}
+
+	.featureWebserver {grid-column: 2;}
+	.featureStatsd { grid-column: 4; }
+	.featureCLI {grid-column: 6;}
 
 	</style>
 
@@ -62,20 +143,49 @@
 <body>
 	
 	<div class=wrapper>
-		<div class=header>header</div>
+		<div class=header>
+			<div class=col12>
+				<div class=headerGrid>
+					<div class="largeHeaderText">PingWatcher</div>
+					<div class="smallHeaderText">a tool for monitoring</div>
+				</div>
+				<div class="headerImage"><img id=imageBottom src="img/demoimage.png" width=100%></div>
+			</div>
+		</div>
 		
 		<div class=install-wrapper>
+
+		<div class=installText><center>Installation is easy on MacOS or Linux.  Just install the RRD dependency and then install pingwatcher from with python's pip tool.</center></div>
 		<div class=linux>
-			<h1>Install for Linux</h1>
-			<img src="img/linuxInstall.png" width=100%>	
+			<div class=largeHeaderTextDark><br>Install for Linux</div><br>
+			<div class=codeBox>
+				# apt install rrd-tool<br>
+				# pip install pingchecker
+			</div>
+
 		</div>
 
 		<div class=mac>
-			<h1>Install for MacOS</h1>
-			<img src="img/macInstall.png" width=100%>	
+			<div class=largeHeaderTextDark><br>Install for MacOS</div><br>
+			<div class=codeBox>
+				# brew install rrdtool<br>
+				# pip install pingchecker
+			</div>
+
 		</div>
-		
 	</div>
+
+
+	<div class=features>
+		<div class=featureWebserver>Built in webserver lets you view graphs from whatever host you start on it.</div>
+		<div class=featureStatsd>With the ability to send data directly to any statsd server, you can view your data in whatever interface you want.</div>
+		<div class=featureCLI>Simple to use CLI, allows you to start monitoring devices quickly, no configuration files to figure out.</div>
+	</div>
+
+	<div class=usage>
+
+	</div>
+
 
 </body>
 </html>
