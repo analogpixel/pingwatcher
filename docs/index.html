@@ -131,12 +131,18 @@
 		font-size: 1.3em;
 		color: #ddd;
 		padding: 20px;
+
 	}
 
-	.featureWebserver {grid-column: 2;}
-	.featureStatsd { grid-column: 4; }
-	.featureCLI {grid-column: 6;}
+	.featureWebserver { grid-column: 2; height: 300px;}
+	.featureWebserverFlex { grid-column: 2; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+	.featureStatsd {  grid-column: 4; height: 300px;}
+	.featureStatsdFlex {  display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+	.featureCLI { grid-column: 6; height: 300px;}
+	.featureCLIFlex {display: flex; flex-direction: column; justify-content: space-between; height: 100%;}
 
+	.item_top {   order: 1; flex-grow: 1}
+	.item_bottom {  order: 2; margin-top: auto;}
 	</style>
 
 </head>
@@ -177,9 +183,27 @@
 
 
 	<div class=features>
-		<div class=featureWebserver><center><img src=img/webserver.png width=190></center><br>Built in webserver lets you view graphs from whatever host you start on it.</div>
-		<div class=featureStatsd><center><img src=img/StatsD.png width=190></center><br>With the ability to send data directly to any statsd server, you can view your data in whatever interface you want.</div>
-		<div class=featureCLI><center><img src=img/cli.png width=190></center>Simple to use CLI, allows you to start monitoring devices quickly, no configuration files to figure out.</div>
+		<div class=featureWebserver>
+			<div class=featureWebserverFlex>
+				<div class=item_top><center><img src=img/webserver.png width=190></center><br></div>
+				<div class=item_bottom>Built in webserver lets you view graphs from whatever host you start on it.</div>
+			</div>
+		</div>
+
+		<div class=featureStatsd>
+			<div class=featureStatsdFlex>
+				<div class=item_top><center><br><br><img src=img/StatsD.png width=190></center><br></div>
+				<div class=item_bottom>The ability to send data directly to any statsd server, you can view your data in whatever interface you want</div>
+			</div>
+		</div>
+
+		<div class=featureCLI>
+			<div class=featureCLIFlex>
+				<div class=item_top><center><img src=img/cli.png width=190></center><br></div>
+				<div class=item_bottom>Simple to use CLI, allows you to start monitoring devices quickly, no configuration files to figure out.</div>
+			</div>
+		</div>
+
 	</div>
 
 	<div class=usage>
