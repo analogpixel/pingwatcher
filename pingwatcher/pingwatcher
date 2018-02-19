@@ -112,7 +112,7 @@ args = parser.parse_args()
 if os.geteuid() != 0:
 	print("You must be root to run this program")
 	sys.exit()
-	
+
 ## Build the hostdata 
 hostdata = {}
 cc = getColor()
@@ -136,7 +136,6 @@ for h in args.host:
 			sys.exit()
 	hostdata[ip] = {'name': name, 'color': cc.__next__() }
 
-	
 
 ## Configure the different backends as needed
 if args.backend == 'rrd':
