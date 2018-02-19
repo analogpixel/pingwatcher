@@ -143,6 +143,30 @@
 
 	.item_top {   order: 1; flex-grow: 1}
 	.item_bottom {  order: 2; margin-top: auto;}
+
+	.usage-wrapper {
+		background-color: #f9f9f9;
+		display: grid;
+		grid-template-columns: 4fr 1fr 6fr;
+		grid-template-rows: repeat(90px);
+		padding: 20px;
+		padding-top: 50px;
+		grid-row-gap: 50px;
+		
+	}
+
+	.usage-item-text {
+		padding-top: 10px;
+		grid-column: 1;
+		text-align: right;
+		font-size: 1.3em;
+	
+	}
+
+	.usage-item-cmd {
+		grid-column: 3;
+	}
+
 	</style>
 
 </head>
@@ -206,10 +230,18 @@
 
 	</div>
 
-	<div class=usage>
+	<div class=usage-wrapper>
+		<div class=usage-item-text>Start pingwatcher looking at google, and then start a webserver with the results on http://localhost:8090</div>
+		<div class=usage-item-cmd> <div class="codeBox"># pingwatcher --host google:www.google.com</div> </div>
 
+		<div class=usage-item-text>Send stats to a local statsd port. By default the stats are placed under the pingwatcher branch (this can be changed 
+		with the --statsdPrefix flag)</div>
+		<div class=usage-item-cmd> <div class="codeBox"># pingwatcher --host google:www.google.com --backend statsd --statsd localhost:8080</div> </div>
+
+		<br>
 	</div>
 
 
+	<br><br><br>
 </body>
 </html>
