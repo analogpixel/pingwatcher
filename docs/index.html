@@ -40,10 +40,11 @@
 	}
 
 	.headerGrid {
-		grid-column: 5/6;
+		grid-column: 6/7;
 		grid-row: 2;
 		justify-content: center;
 		align-content: center;
+		margin-top: -60px;
 	}
 
 	.headerImage {
@@ -168,28 +169,40 @@
 	}
 
 	</style>
-
+	<title>pingwatcher a tool to simply monitor latency</title>
 </head>
 <body>
 	
 	<div class=wrapper>
 		<div class=header>
 			<div class=col12>
+
 				<div class=headerGrid>
-					<div class="largeHeaderText">PingWatcher</div>
-					<div class="smallHeaderText">a tool for monitoring</div>
+
+					<div style="display:flex;flex-direction: row">
+
+					<div><img src=img/logo1-01.png width=150></div>
+
+					<div style="margin-top: 20px; margin-left: 20px;">
+						<div class="largeHeaderText">PingWatcher</div>
+						<div class="smallHeaderText">a tool for monitoring</div>					
+					</div>
+
+					</div>
+
 				</div>
+
 				<div class="headerImage"><img id=imageBottom src="img/demoimage.png" width=100%></div>
 			</div>
 		</div>
 		
 		<div class=install-wrapper>
 
-		<div class=installText><center>Installation is easy on MacOS or Linux.  Just install the RRD dependency and then install pingwatcher from with python's pip tool.</center></div>
+		<div class=installText><center>Installation is easy on MacOS or Linux.  Just install the RRD dependency and then install pingwatcher from with python's pip tool (assuming you have python 3 already installed).</center></div>
 		<div class=linux>
 			<div class=largeHeaderTextDark><br>Install for Linux</div><br>
 			<div class=codeBox>
-				# apt install rrd-tool<br>
+				# apt install rrdtool<br>
 				# pip install pingchecker
 			</div>
 
@@ -210,14 +223,14 @@
 		<div class=featureWebserver>
 			<div class=featureWebserverFlex>
 				<div class=item_top><center><img src=img/webserver.png width=190></center><br></div>
-				<div class=item_bottom>Built in webserver lets you view graphs from whatever host you start on it.</div>
+				<div class=item_bottom>Built in web-server lets you view graphs from whatever host you start on it.</div>
 			</div>
 		</div>
 
 		<div class=featureStatsd>
 			<div class=featureStatsdFlex>
 				<div class=item_top><center><br><br><img src=img/StatsD.png width=190></center><br></div>
-				<div class=item_bottom>The ability to send data directly to any statsd server, you can view your data in whatever interface you want</div>
+				<div class=item_bottom>The ability to send data directly to any statsd server, you can view your data in whatever interface you want.</div>
 			</div>
 		</div>
 
@@ -231,7 +244,7 @@
 	</div>
 
 	<div class=usage-wrapper>
-		<div class=usage-item-text>Start pingwatcher looking at google, and then start a webserver with the results on http://localhost:8090</div>
+		<div class=usage-item-text>Start pingwatcher looking at google, and then start a web-server with the results on http://localhost:8090</div>
 		<div class=usage-item-cmd> <div class="codeBox"># pingwatcher --host google:www.google.com</div> </div>
 
 		<div class=usage-item-text>Send stats to a local statsd port. By default the stats are placed under the pingwatcher branch (this can be changed 
@@ -239,9 +252,14 @@
 		<div class=usage-item-cmd> <div class="codeBox"># pingwatcher --host google:www.google.com --backend statsd --statsd localhost:8080</div> </div>
 
 		<br>
+
+
+
 	</div>
 
+	<div style="display: flex; justify-content: flex-end">
+			<div style="margin-right: 20px">View the project on <a href="https://github.com/analogpixel/pingwatcher">Github</a><br>
+		</div>
 
-	<br><br><br>
 </body>
 </html>
