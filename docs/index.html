@@ -84,7 +84,7 @@
 		background-color: #f9f9f9;
 		display: grid;
 		grid-template-columns: 1fr 6fr 1fr 6fr 1fr;
-		grid-template-rows: 90px 300px;
+		grid-template-rows: 190px 300px;
 	}
 
 	.installText {
@@ -198,7 +198,12 @@
 		
 		<div class=install-wrapper>
 
-		<div class=installText><center>Installation is easy on MacOS or Linux.  Just install the RRD dependency and then install pingwatcher from with python's pip tool (assuming you have python 3 already installed).</center></div>
+		<div class=installText>
+			<center>
+				Pingwatcher is a simple tool that takes a lists of hosts, and the monitors the latency to those hosts over time.  As it monitors these hosts, Pingwatcher also creates a graph of all this activity that can be monitored from the built in web-server.  All of this is done with limited dependencies, and zero config, so you don't have to spend time setting up infrastructure just to do a simple network test.
+			</center>
+			<br>
+			<center>Installation is easy on MacOS or Linux.  Just install the RRD dependency and then install pingwatcher with python's pip tool (assuming you have python 3 already installed).</center></div>
 		<div class=linux>
 			<div class=largeHeaderTextDark><br>Install for Linux</div><br>
 			<div class=codeBox>
@@ -246,6 +251,12 @@
 	<div class=usage-wrapper>
 		<div class=usage-item-text>Start pingwatcher looking at google, and then start a web-server with the results on http://localhost:8090</div>
 		<div class=usage-item-cmd> <div class="codeBox"># pingwatcher --host google:www.google.com</div> </div>
+
+		<div class=usage-item-text>Monitor multiple hosts, and then start a web-server with the results on http://localhost:8090</div>
+		<div class=usage-item-cmd> <div class="codeBox"># pingwatcher --host google:www.google.com  --host yahoo:www.yahoo.com --host cnn:www.cnn.com</div> </div>
+
+		<div class=usage-item-text>Change the view window to 8 hours of time</div>
+		<div class=usage-item-cmd> <div class="codeBox"># pingwatcher --time 8 --host google:www.google.com  --host yahoo:www.yahoo.com --host cnn:www.cnn.com</div> </div>
 
 		<div class=usage-item-text>Send stats to a local statsd port. By default the stats are placed under the pingwatcher branch (this can be changed 
 		with the --statsdPrefix flag)</div>

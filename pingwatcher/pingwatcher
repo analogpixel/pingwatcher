@@ -65,7 +65,7 @@ def getColor():
 
 
 def writePNG(hostdata):
-	cmd = [ "pingstats3.png" , "--start", "-1h",  "--vertical-label=Num", "-w 800" , 
+	cmd = [ "pingstats3.png" , "--start", "-" + str(args.time) + "h",  "--vertical-label=Num", "-w 800" , 
 	"-h 400", "--no-gridfit", "--zoom", "2","--color","CANVAS#f9f9f9", "--color", "BACK#f9f9f9"]
     
 	for h in hostdata:
@@ -107,6 +107,7 @@ parser.add_argument('--statsd', type=str, default="localhost:8080", help='hostna
 parser.add_argument('--statsdPrefix', type=str, default='pingwatcher', help='where to place statsd stats')
 parser.add_argument('--disableStatus', default=False, action='store_true', help='turn off the # marks')
 parser.add_argument('--clean', action='store_true', help='clean up rrd and png files on exit')
+parser.add_argument('--time', type=int, default=1, help='how many hours to show on graph')
 args = parser.parse_args()
 
 if os.geteuid() != 0:
